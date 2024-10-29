@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #D9D9D9; /* Container color */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+        }
+
+        .menu {
+            flex: 1;
+            background-color: #f2f2f2; /* Light gray for the menu */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        .menu h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px;
+            color: #495B67; /* Text color */
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a.active {
+            background-color: #D9D9D9; /* Highlight active link */
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            background-color: #b0b0b0; /* Hover effect */
+        }
+
+        .main-content {
+            flex: 3;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            margin: 20px 0;
+        }
+
+        .result {
+            background-color: #f2f2f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn.next-queue {
+            background-color: #495B67; /* Green */
+            color: white;
+        }
+
+        .btn.new-queue {
+            background-color: #495B67; /* Blue */
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="menu">
+        <h3>Reception</h3>
+        <a href="receptiondashboard.php">Dashboard</a>
+        <a href="waitinglist.php">Waiting List</a>
+        <a href="pat_reg.html">Register</a>
+        <a href="checkappointment.html">Check Appointment</a>
+        <a href="login.html">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <h2>Check Appointment</h2>
+        <div class="result">
+            <p><strong>Patient Name:</strong> Kebede S.</p>
+            <p><strong>Mobile:</strong> +251911234567</p>
+            <p><strong>Appointment Time:</strong> 10:00 AM</p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn next-queue">Next Queue</button>
+            <button class="btn new-queue">New Queue</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Admin</title>
+    <style>
+        /* Reset some default styles */
+        body, h2, ul, li, p {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #ffffff;
+            flex-direction: column; /* To allow header on top and content below */
+        }
+
+        /* Header styles */
+        .header {
+            width: 100%;
+            background-color: #495B67;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            color: #fff;
+            background-color: #606a76;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #505962;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 150px;
+            background-color: #D9D9D9;
+            padding-top: 0px; /* Adjusted for fixed header */
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 50px; /* Adjusted for fixed header */
+            bottom: 50px;
+            left: 0;
+            padding-bottom: 20px;
+            border-radius: 5px;
+            margin-top: 70px; /* Below the fixed header */
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-left: 0;
+            flex-grow: 1;
+            margin-top: 20px;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #495B67;
+            padding: 10px 20px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background-color: #606a76;
+        }
+
+        /* Content area styles */
+        .content {
+            margin-left: 220px;
+            margin-top: 70px; /* Adjusted for fixed header */
+            padding: 30px;
+            background-color: #ffffff;
+            width: calc(100% - 220px);
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .content h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Department list styles */
+        .department-list {
+            background-color: #D9D9D9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .department-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .department-list ul li {
+            background-color: #f7f8fc;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .department-list ul li .delete-btn {
+            cursor: pointer;
+            color: #ff4c4c;
+            font-size: 18px;
+        }
+
+        /* Add department button */
+        .add-department-btn {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .add-department-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h2>User Admin</h2>
+        <a href="#" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+           
+            <li><a href="user.html" id="usersLink">Users</a></li>
+            <li><a href="room.html" id="roomsLink">Rooms</a></li>
+            <li><a href="#" id="departmentsLink" class="active">Departments</a></li>
+        </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+        <h2>List of Departments</h2>
+        <div class="department-list">
+            <ul id="departmentsList">
+                <!-- Department items will be loaded here -->
+            </ul>
+            <button class="add-department-btn">➕ Add Department</button>
+        </div>
+    </div>
+
+    <!-- JavaScript code -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Load departments when the page is loaded
+            loadDepartments();
+
+            // Add department button handler
+            document.querySelector('.add-department-btn').addEventListener('click', function() {
+                let departmentName = prompt("Enter Department Name:");
+                if (departmentName) {
+                    addDepartment(departmentName);
+                }
+            });
+
+            // Load departments from the database
+            function loadDepartments() {
+                fetch('backend.php?action=load')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('departmentsList').innerHTML = data;
+                    })
+                    .catch(error => console.error('Error loading departments:', error));
+            }
+            function editDepartment(id, currentName) {
+    // Prompt for new department name
+    const newName = prompt("Edit Department Name:", currentName);
+    if (newName) {
+        // Make an AJAX request to update the department
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "your_php_file.php", true); // Replace with your actual PHP file name
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                alert(xhr.responseText); // Show success/error message
+                // Optionally refresh the department list or update the UI
+                loadDepartments(); // Assume you have a function to reload departments
+            }
+        };
+        xhr.send("editDepartment=" + id + "&departmentName=" + encodeURIComponent(newName));
+    }
+}
+
+
+            // Add a department to the database
+            function addDepartment(departmentName) {
+                fetch('backend.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `departmentName=${encodeURIComponent(departmentName)}`
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (data === 'success') {
+                        loadDepartments(); // Reload departments after adding
+                    } else {
+                        alert('Error adding department: ' + data);
+                    }
+                })
+                .catch(error => console.error('Error adding department:', error));
+            }
+
+            // Delete a department
+            window.deleteDepartment = function(departmentId) {
+                if (confirm("Are you sure you want to delete this department?")) {
+                    fetch('backend.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `deleteDepartment=${encodeURIComponent(departmentId)}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            loadDepartments(); // Reload departments after deletion
+                        } else {
+                            alert('Error deleting department: ' + data);
+                        }
+                    })
+                    .catch(error => console.error('Error deleting department:', error));
+                }
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Patient Registration</title>
+    <style>
+        /* Common styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1E1E1; /* Common background color */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the start */
+            height: 100vh;
+        }
+
+        .headermain {
+            width: 100%;
+            background-color: #495B67;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .headermain h2 {
+            margin: 0;
+        }
+
+        .dashboard {
+            background-color: #D9D9D9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            margin-top: 70px; /* Adjust margin to accommodate the fixed header */
+        }
+
+        .menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+        }
+
+        .menu button {
+            padding: 15px;
+            background-color: #D9D9D9;
+            color: black;
+            border: 2px solid white;
+            border-radius: 0;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .menu button:first-child {
+            border-top-right-radius: 15px;
+        }
+
+        .menu button:last-child {
+            border-bottom-right-radius: 15px;
+        }
+
+        .menu button:hover {
+            background-color: #b0b0b0;
+            color: black;
+        }
+
+        /* Content styles */
+        .content {
+            flex: 3;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #F0F0F0;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px 5px 0 0;
+        }
+
+        /* Form styles */
+        .registration-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #F8F8F8;
+        }
+
+        .registration-form h2 {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            justify-content: flex-start;
+        }
+
+        .form-group label {
+            flex: 1;
+            margin-right: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .form-group input[type="text"], 
+        .form-group input[type="number"], 
+        .form-group select {
+            flex: 2;
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Button styles */
+        .submit-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .submit-button button {
+            background-color: #555;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button button:hover {
+            background-color: #333;
+        }
+
+        /* Address styling */
+        .form-group input[type="text"]#address {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group input[type="text"]#address:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="headermain">
+        <h2> Reception</h2>
+    </div>
+
+    <div class="dashboard">
+        <div class="menu">
+            <button id="dashboardBtn">Dashboard</button>
+            <button id="waitingListBtn">Waiting list</button>
+            <button id="registerBtn">Register</button>
+            <button id="checkAppointmentBtn">Check appointment</button>
+            <button id="logoutBtn">Logout</button>
+        </div>
+
+        <div class="content">
+            <div class="header">New Patient Registration</div>
+            <div class="registration-form">
+                <h2>Patient Information</h2>
+                
+                <!-- Patient Registration Form -->
+                <form id="patientForm">
+                    <div class="form-group">
+                        <label for="patient-name">Patient Name:</label>
+                        <input type="text" id="patient-name" name="patient-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="text" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="case">Case:</label>
+                        <select id="case" name="case" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sex:</label>
+                        <input type="radio" id="male" name="sex" value="male" required>
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="sex" value="female">
+                        <label for="female">Female</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency:</label>
+                        <input type="radio" id="emergency-yes" name="emergency" value="yes" required>
+                        <label for="emergency-yes">Yes</label>
+                        <input type="radio" id="emergency-no" name="emergency" value="no">
+                        <label for="emergency-no">No</label>
+                    </div>
+
+                    <div class="submit-button">
+                        <button type="submit">SUBMIT</button>
+                    </div>
+                </form>
+
+                <!-- Placeholder to display the ticket number -->
+                <div id="ticketNumber" style="margin-top: 20px; font-weight: bold;">
+                    <!-- Ticket number will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation buttons
+        document.getElementById('dashboardBtn').onclick = function() {
+            window.location.href = 'receptiondashboard.php';
+        };
+        document.getElementById('waitingListBtn').onclick = function() {
+            window.location.href = 'waitinglist.php';
+        };
+        document.getElementById('registerBtn').onclick = function() {
+            window.location.href = 'pat_reg.html';
+        };
+        document.getElementById('checkAppointmentBtn').onclick = function() {
+            window.location.href = 'checkappointment.html';
+        };
+        document.getElementById('logoutBtn').onclick = function() {
+            window.location.href = 'login.html';
+        };
+
+        // Fetch departments and populate the dropdown
+        fetch('get_departments.php')
+        .then(response => response.json())
+        .then(departments => {
+            const select = document.getElementById('case');
+            departments.forEach(department => {
+                const option = document.createElement('option');
+                option.value = department.name;
+                option.textContent = department.name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching departments:', error));
+
+        // Handle form submission with Fetch API
+        document.getElementById('patientForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            var formData = new FormData(this);
+
+            fetch('pat_reg.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Display the ticket number at the bottom of the form
+                document.getElementById('ticketNumber').innerHTML = data;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

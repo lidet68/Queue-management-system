@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Page</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('pexels-aleksandr-slobodianyk-367235-989946.jpg') no-repeat center center fixed; /* Background image */
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .top-rectangle {
+            background-color: #2B7695; /* Header color */
+            padding: 15px;
+            border-radius: 8px 8px 0 0; /* Rounded top corners */
+            display: flex; /* Flexbox for button alignment */
+            justify-content: space-between; /* Space between buttons */
+            align-items: center; /* Center buttons vertically */
+        }
+
+        .header-btn {
+            background-color: #D9D9D9;
+            color: black;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 48%; /* Make buttons fit side by side */
+            transition: background-color 0.3s;
+        }
+
+        .header-btn:hover {
+            background-color: #B0B0B0; /* Darker on hover */
+        }
+
+        .information-card {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .card-input, 
+        #doctor, 
+        #book-date {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+            background-color: #f0f0f0; /* Input background color */
+        }
+
+        .btn-done {
+            width: 100%;
+            background-color: #2B7695; /* Submit button color */
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-done:hover {
+            background-color: #1E5B73; /* Darker shade on hover */
+        }
+
+        .info-details {
+            margin: 10px 0;
+        }
+
+        .info-details p {
+            margin: 5px 0;
+        }
+
+        h2, h3 {
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-rectangle">
+            <button class="header-btn" onclick="window.location.href='getappointment.html'">Get Appointment</button>
+            <button class="header-btn" onclick="window.location.href='checkqueue.html'">Check Queue</button>
+        </div>
+        <div class="information-card">
+            <h2>Information</h2>
+            <input type="text" placeholder="Enter your card number" class="card-input">
+            <div class="info-details">
+                <p><strong>Name:</strong> Abebe K.</p>
+                <p><strong>Age:</strong> 30</p>
+                <p><strong>Phone:</strong> 091112233</p>
+                <p><strong>Case:</strong> General Check Up</p>
+            </div>
+            <h3>To Book Again</h3>
+            <label for="doctor">Doctor</label>
+            <input type="text" id="doctor" placeholder="Enter Doctor's Name">
+            <label for="book-date">Book For</label>
+            <input type="date" id="book-date">
+            <button class="btn-done" onclick="window.location.href='ticketnumber.html'">Done</button>
+        </div>
+    </div>
+</body>
+
+</html>

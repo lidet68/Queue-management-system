@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Information</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('pexels-aleksandr-slobodianyk-367235-989946.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            max-width: 400px;
+            height: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .top-rectangle {
+            background-color: #2B7695;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-btn {
+            background-color: #D9D9D9;
+            color: black;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 48%;
+            transition: background-color 0.3s;
+        }
+        .header-btn:hover {
+            background-color: #B0B0B0;
+        }
+        .input-card {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(100% - 20px);
+        }
+        .info-card {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .queue-number {
+            background-color: #2B7695;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .queue-number .number {
+            color: red;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .parallel-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .waiting-info {
+            width: 48%;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #D9D9D9;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .waiting-info span {
+            color: black;
+            font-weight: bold;
+        }
+        .waiting-info .number {
+            color: #37852A;
+        }
+        .divider {
+            height: 60px;
+            width: 2px;
+            background-color: black;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-rectangle">
+            <button class="header-btn" onclick="window.location.href='getappointment.html'">Get Appointment</button>
+            <button class="header-btn" onclick="window.location.href='checkqueue.html'">Check Queue</button>
+        </div>
+
+        <form id="ticketForm" method="POST">
+            <input type="text" name="ticket_number" class="input-card" placeholder="Enter your ticket number" required />
+            <button type="submit" class="header-btn">Submit</button>
+        </form>
+        
+        <div class="info-card">
+            <div class="queue-number">
+                YOUR QUEUE NO:
+                <span class="number">Not Found</span>
+            </div>
+            <div class="parallel-info">
+                <div class="waiting-info">
+                    <span>Waiting Hour:</span>
+                    <span class="number" id="waiting-hour">Not Found</span>
+                </div>
+                <div class="divider"></div>
+                <div class="waiting-info">
+                    <span>Current Queue:</span>
+                    <span class="number" id="current-queue">emergency</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('ticketForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        fetch('get_queue_info.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Data received:', data);
+            if (data.error) {
+                document.querySelector('.queue-number .number').textContent = 'Not Found';
+                document.getElementById('waiting-hour').textContent = 'Not Found';
+                document.getElementById('current-queue').textContent = 'Not Found';
+            } else {
+                document.querySelector('.queue-number .number').textContent = data.token_number || 'Not Found';
+                document.getElementById('waiting-hour').textContent = data.specific_waiting_time !== null ? data.specific_waiting_time : 'Not Found';
+                if (data.patients.length > 0) {
+                    const firstPatient = data.patients[0];
+                    document.getElementById('current-queue').textContent = firstPatient.token_number || 'Not Found';
+                } else {
+                    document.getElementById('current-queue').textContent = 'No patients';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.querySelector('.queue-number .number').textContent = 'Error';
+            document.getElementById('waiting-hour').textContent = 'Error';
+            document.getElementById('current-queue').textContent = 'Error';
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Admin - Rooms</title>
+    <style>
+        /* Same styles as before */
+        body, h2, ul, li, p {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            height: 80vh;
+            background-color: #ffffff;
+            margin-top: 50px;
+            flex-direction: column;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #495B67;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            color: #fff;
+            background-color: #606a76;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #505962;
+        }
+
+        .sidebar {
+            width: 150px;
+            background-color: #D9D9D9;
+            padding-top: 0px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 50;
+            bottom: 50;
+            left: 0;
+            padding-bottom: 20px;
+            border-radius: 5px;
+            margin-top: 150px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-left: 0;
+            flex-grow: 1;
+            margin-top: 20px;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #495B67;
+            padding: 10px 20px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background-color: #606a76;
+        }
+
+        .content {
+            margin-left: 220px;
+            margin-top: 70px;
+            padding: 30px;
+            background-color: #D9D9D9;
+            width: calc(100% - 220px);
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .content h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 5px;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 0px solid #0e0d0d;
+            border-radius: 5px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #D9D9D9;
+            color: white;
+        }
+
+        td {
+            background-color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #D9D9D9;
+        }
+
+        .icon-btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .icon-btn img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h2>User Admin</h2>
+        <a href="#" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="user.html" id="usersLink">Users</a></li>
+            <li><a href="#" id="roomsLink" class="active">Rooms</a></li>
+            <li><a href="dep.php" id="departmentsLink">Departments</a></li>
+        </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+        <h2>List of Rooms</h2>
+        <table id="roomsTable">
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Department</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Room items will be loaded here -->
+            </tbody>
+        </table>
+        <button class="add-room-btn">➕ Add Room</button>
+
+        <!-- Add Room Form (Hidden initially) -->
+        <div id="addRoomForm" style="display: none; margin-top: 20px;">
+            <h3>Add New Room</h3>
+            <form id="roomForm">
+                <label for="roomName">Room Name:</label>
+                <input type="text" id="roomName" name="roomName" required><br><br>
+
+                <label for="department">Department:</label>
+                <select id="department" name="department" required>
+                    <!-- Departments will be loaded here -->
+                </select><br><br>
+
+                <button type="submit">Add Room</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript code -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            loadRooms();
+            loadDepartments();
+
+            document.querySelector('.add-room-btn').addEventListener('click', function() {
+                document.getElementById('addRoomForm').style.display = 'block';
+            });
+
+            document.getElementById('roomForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const roomName = document.getElementById('roomName').value;
+                const departmentId = document.getElementById('department').value;
+
+                fetch('room.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ roomName: roomName, departmentId: departmentId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadRooms();
+                        document.getElementById('addRoomForm').reset();
+                        document.getElementById('addRoomForm').style.display = 'none';
+                    } else {
+                        console.error('Error adding room:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            function loadRooms() {
+                fetch('room.php?action=fetch_rooms')
+                    .then(response => response.json())
+                    .then(data => {
+                        const roomsTableBody = document.getElementById('roomsTable').querySelector('tbody');
+                        roomsTableBody.innerHTML = '';
+                        data.forEach(room => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td><input type="text" value="${room.roomName}" data-room-id="${room.id}" readonly></td>
+                                <td><input type="text" value="${room.departmentName}" readonly></td>
+                                <td>
+                                    <button class="icon-btn edit-btn"><img src="edit-icon.png" alt="Edit"></button>
+                                    <button class="icon-btn save-btn" style="display:none;"><img src="save-icon.png" alt="Save"></button>
+                                    <button class="icon-btn delete-btn"><img src="delete-icon.png" alt="Delete"></button>
+                                </td>`;
+                            roomsTableBody.appendChild(tr);
+
+                            const editBtn = tr.querySelector('.edit-btn');
+                            const saveBtn = tr.querySelector('.save-btn');
+                            const deleteBtn = tr.querySelector('.delete-btn');
+                            const roomNameInput = tr.querySelector('input[type="text"]');
+
+                            editBtn.addEventListener('click', function() {
+                                roomNameInput.removeAttribute('readonly');
+                                roomNameInput.focus();
+                                editBtn.style.display = 'none';
+                                saveBtn.style.display = 'inline';
+                            });
+
+                            saveBtn.addEventListener('click', function() {
+                                const updatedRoomName = roomNameInput.value;
+                                const roomId = roomNameInput.dataset.roomId;
+
+                                fetch('room.php?action=update_room', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ roomId: roomId, roomName: updatedRoomName })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        roomNameInput.setAttribute('readonly', true);
+                                        saveBtn.style.display = 'none';
+                                        editBtn.style.display = 'inline';
+                                    } else {
+                                        console.error('Error updating room:', data.error);
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                            });
+
+                            deleteBtn.addEventListener('click', function() {
+                                const roomId = roomNameInput.dataset.roomId;
+
+                                fetch('room.php?action=delete_room', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ roomId: roomId })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        tr.remove();
+                                    } else {
+                                        console.error('Error deleting room:', data.error);
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                            });
+                        });
+                    })
+                    .catch(error => console.error('Error loading rooms:', error));
+            }
+             
+
+            function loadDepartments() {
+                fetch('fetch_departments.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        const departmentSelect = document.getElementById('department');
+                        data.forEach(department => {
+                            const option = document.createElement('option');
+                            option.value = department.id;
+                            option.textContent = department.name;
+                            departmentSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error loading departments:', error));
+            }
+            
+        });
+    </script>
+</body>
+</html>
